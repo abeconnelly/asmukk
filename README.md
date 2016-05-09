@@ -6,7 +6,7 @@ The straight forward dynamic programming algorithm for approximate string alignm
 `O(N*M)` time and `O(N*M)` space, where `N` and `M` are the lengths of the strings to compare.
 Though there's good reason to [think that this is optimal](http://arxiv.org/abs/1412.0348), often
 the strings we want to compare are very similar and the straight forward dynamic programming
-solution does a lot of extra work, considering paths that are far from optimal needlessly.
+solution does a lot of extra work, considering paths that are far from optimal.
 
 This was noticed by [Ukkonen](http://www.sciencedirect.com/science/article/pii/S0019995885800462)
 and led to an "output sensitive" algorithm that runs in `O( max{N,M) * d )`, where `d` is the edit
