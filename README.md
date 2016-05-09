@@ -62,27 +62,6 @@ int main(int argc, char **argv) {
 }
 ```
 
-## Go
-
-```go
-package main
-
-import "github.com/abeconnelly/asmukk"
-
-func main() {
-  x := "cute"
-  y := "cat"
-
-  mismatch,gap := 3,2
-  gap_char := '-'
-
-  X,Y,score := asmukk.Align2(x,y,mismatch,gap,gap_char)
-
-  fmt.Printf("score %d\n", score)
-  fmt.Printf("%s\n%s\n", X, Y)
-}
-```
-
 # References
 
 * ["Algorithms for Approximate String Matching" by E. Ukkonen](http://www.sciencedirect.com/science/article/pii/S0019995885800462)
