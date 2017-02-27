@@ -15,6 +15,7 @@ void show_help(void) {
   printf("  [-m mismatch_cost]    Cost of mismatched character (must be positive, default %d)\n", ASM_UKK_MISMATCH);
   printf("  [-g gap_cost]         Cost of gap (must be positive, default %d)\n", ASM_UKK_GAP);
   printf("  [-c gap_char]         Gap character (default '-')\n");
+  printf("  [-T threshold]        Set threshold score.  Report -1 if threshold is exceeded\n");
   printf("  [-S]                  Do not print aligned sequence\n");
   printf("  [-h]                  Help (this screen)\n");
 }
@@ -44,10 +45,11 @@ int main(int argc, char **argv) {
   int print_align_sequence=1;
   int mismatch_cost=ASM_UKK_MISMATCH, gap_cost=ASM_UKK_GAP;
   int score=-1;
+  int threshold = -1;
 
   FILE *ifp = stdin;
 
-  while ((ch=getopt(argc, argv, "m:g:hSi:"))!=-1) switch(ch) {
+  while ((ch=getopt(argc, argv, "m:g:hSi:T:"))!=-1) switch(ch) {
     case 'm':
       mismatch_cost = atoi(optarg);
       break;
@@ -59,6 +61,9 @@ int main(int argc, char **argv) {
       break;
     case 'c':
       gap_char = optarg[0];
+      break;
+    case 'T':
+      threshold = atoi(optarg);
       break;
     case 'S':
       print_align_sequence=0;
@@ -96,19 +101,28 @@ int main(int argc, char **argv) {
   a_s = (char *)(a.c_str());
   b_s = (char *)(b.c_str());
 
-  if (print_align_sequence) {
-    score = asm_ukk_align2(&X, &Y, a_s, b_s, mismatch_cost, gap_cost, gap_char);
-    if (score>=0) {
-      printf("%d\n%s\n%s\n", score, X, Y);
+  if (threshold>0) {
+    score = sa_align_ukk2(NULL, NULL, a_s, b_s, threshold, mismatch_cost, gap_cost, gap_char);
+    printf("%d\n", score);
+  }
+
+  else {
+
+    if (print_align_sequence) {
+      score = asm_ukk_align2(&X, &Y, a_s, b_s, mismatch_cost, gap_cost, gap_char);
+      if (score>=0) {
+        printf("%d\n%s\n%s\n", score, X, Y);
+      } else {
+        printf("%d\n", score);
+      }
+
+      if (X) { free(X); }
+      if (Y) { free(Y); }
     } else {
+      score = asm_ukk_align2(NULL, NULL, a_s, b_s, mismatch_cost, gap_cost, gap_char);
       printf("%d\n", score);
     }
 
-    if (X) { free(X); }
-    if (Y) { free(Y); }
-  } else {
-    score = asm_ukk_align2(NULL, NULL, a_s, b_s, mismatch_cost, gap_cost, gap_char);
-    printf("%d\n", score);
   }
 
   return 0;

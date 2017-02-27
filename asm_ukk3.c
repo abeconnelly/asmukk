@@ -21,8 +21,8 @@
 
 #include "asm_ukk.h"
 
-int g_verbose=0;
-int g_debug=0;
+static int g_verbose=0;
+static int g_debug=0;
 
 int align_W3(char **X, char **Y, char *a, char *b, int *W, int m_r, int n_c, int w_len, int (*score_func)(char, char), char gap_char) {
   int i;
